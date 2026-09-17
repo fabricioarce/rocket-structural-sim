@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-17T16:51:44.769444+00:00",
+  "generated_utc": "2026-09-17T16:54:52.310001+00:00",
   "mode": "demo preliminar",
   "versions": {
     "rocketpy": "1.13.0",
@@ -61,7 +61,7 @@
   },
   "checks": {
     "unit_tests_passed": true,
-    "unit_test_count": 21,
+    "unit_test_count": 22,
     "refinement_below_5_percent": true,
     "algebraic_vs_resimulated_thin_fin": true
   },
@@ -1005,35 +1005,35 @@
     "fibra_vidrio_g10": [
       {
         "thickness_m": 0.001,
-        "min_ratio": 0.18040924667078
+        "min_ratio": 0.1565228038088891
       },
       {
         "thickness_m": 0.0015,
-        "min_ratio": 0.33143294941748686
+        "min_ratio": 0.28755075183115325
       },
       {
         "thickness_m": 0.002,
-        "min_ratio": 0.5102744068386605
+        "min_ratio": 0.4427133439343883
       },
       {
         "thickness_m": 0.0025,
-        "min_ratio": 0.7131301630435178
+        "min_ratio": 0.6187107072397102
       },
       {
         "thickness_m": 0.003,
-        "min_ratio": 0.9374339441670521
+        "min_ratio": 0.8133163462203941
       },
       {
         "thickness_m": 0.004,
-        "min_ratio": 1.44327397336624
+        "min_ratio": 1.2521824304711129
       },
       {
         "thickness_m": 0.005,
-        "min_ratio": 2.017036696626959
+        "min_ratio": 1.7499781467276956
       },
       {
         "thickness_m": 0.006,
-        "min_ratio": 2.651463595339895
+        "min_ratio": 2.300406014649226
       }
     ],
     "fibra_carbono_laminada": [
@@ -1073,35 +1073,35 @@
     "contrachapado_abedul": [
       {
         "thickness_m": 0.001,
-        "min_ratio": 0.07297913357552219
+        "min_ratio": 0.06436154611259859
       },
       {
         "thickness_m": 0.0015,
-        "min_ratio": 0.1340712293478338
+        "min_ratio": 0.11823971027435759
       },
       {
         "thickness_m": 0.002,
-        "min_ratio": 0.20641616094548237
+        "min_ratio": 0.18204194281547653
       },
       {
         "thickness_m": 0.0025,
-        "min_ratio": 0.2884753547053975
+        "min_ratio": 0.25441134930720943
       },
       {
         "thickness_m": 0.003,
-        "min_ratio": 0.3792107017354806
+        "min_ratio": 0.33443240376212374
       },
       {
         "thickness_m": 0.004,
-        "min_ratio": 0.5838330686041775
+        "min_ratio": 0.5148923689007887
       },
       {
         "thickness_m": 0.005,
-        "min_ratio": 0.8159315180695248
+        "min_ratio": 0.7195839612237889
       },
       {
         "thickness_m": 0.006,
-        "min_ratio": 1.0725698347826704
+        "min_ratio": 0.9459176821948607
       }
     ],
     "acrilico_policarbonato": [
@@ -1151,14 +1151,14 @@
     {
       "slug": "fibra_vidrio_g10",
       "nombre": "Fibra de vidrio G10/FR4 laminada",
-      "min_ratio": 0.9374339441670521,
-      "required_thickness_mm": 3.634411907033266,
-      "shear_pa": 5500000000.0,
+      "min_ratio": 0.8133163462203941,
+      "required_thickness_mm": 3.995350911880475,
+      "shear_pa": 4140000000.0,
       "density_kg_m3": 1850
     },
     {
       "slug": "fibra_carbono_laminada",
-      "nombre": "Fibra de carbono laminada (en plano)",
+      "nombre": "Fibra de carbono, tejido 0/90 (cortante en el plano G12)",
       "min_ratio": 0.8479409068759322,
       "required_thickness_mm": 3.8858336537182665,
       "shear_pa": 4500000000.0,
@@ -1167,9 +1167,9 @@
     {
       "slug": "contrachapado_abedul",
       "nombre": "Contrachapado de abedul aeronáutico",
-      "min_ratio": 0.3792107017354806,
-      "required_thickness_mm": 6.644682080645062,
-      "shear_pa": 900000000.0,
+      "min_ratio": 0.33443240376212374,
+      "required_thickness_mm": 7.225296879337461,
+      "shear_pa": 700000000.0,
       "density_kg_m3": 650
     },
     {
@@ -1205,9 +1205,14 @@
       "retrieved": "2026-09-15"
     },
     {
-      "name": "Apogee Components: Peak of Flight, flutter de aletas",
-      "url": "https://www.apogeerockets.com/Peak-of-Flight/Newsletter",
-      "retrieved": "2026-09-15"
+      "name": "Wood Handbook FPL-GTR-190",
+      "url": "https://www.fpl.fs.usda.gov/documnts/fplgtr/fpl_gtr190.pdf",
+      "retrieved": "2026-09-17"
+    },
+    {
+      "name": "MatWeb",
+      "url": "https://www.matweb.com/",
+      "retrieved": "2026-09-17"
     }
   ],
   "data_sha256": {

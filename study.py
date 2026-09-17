@@ -6,6 +6,7 @@ from itertools import product
 import numpy as np
 
 from flutter import Fin, flutter_history, required_thickness
+from materials import get_material
 from simulation import Design, build_flight
 
 
@@ -32,8 +33,7 @@ def _time_grid(flight, samples):
         raise ValueError("samples debe ser un entero mayor o igual que 2")
     start, stop = flight.out_of_rail_time + 1e-5, flight.apogee_time
     events = [flight.max_dynamic_pressure_time, flight.max_speed_time]
-    motor = getattr(flight.rocket, "motor", None)
-    burnout = getattr(motor, "burn_out_time", 3.9)
+    burnout = flight.rocket.motor.burn_out_time
     events.extend((burnout - 1e-5, burnout + 1e-5))
     points = np.linspace(start, stop, samples)
     events = np.clip(np.asarray(events, float), start, stop)
@@ -132,8 +132,6 @@ def thickness_sweep(result, thicknesses_m, shear_pa=None):
 
 def material_sweep(result, slugs, target_ratio=1.25):
     """Recalcula flutter algebraicamente; ignora el cambio de masa de la aleta."""
-    from materials import get_material
-
     if not slugs:
         raise ValueError("Se necesita al menos un material")
     design = Design(**{key: result["summary"][key] for key in asdict(Design())})

@@ -56,7 +56,7 @@ class Design:
         return -1.04956 - centroid
 
 
-def _dry_properties(design):
+def dry_properties(design):
     baseline = Design()
     baseline_mass = 14.426
     body_mass = baseline_mass - baseline.fin_mass
@@ -87,7 +87,7 @@ def build_flight(design=Design(), max_time_step=0.12):
         nozzle_position=0, burn_time=3.9, throat_radius=0.011,
         coordinate_system_orientation="nozzle_to_combustion_chamber",
     )
-    mass, center, i11, i33, _ = _dry_properties(design)
+    mass, center, i11, i33, _ = dry_properties(design)
     off = np.loadtxt(DATA / "rockets/calisto/powerOffDragCurve.csv", delimiter=",")
     on = np.loadtxt(DATA / "rockets/calisto/powerOnDragCurve.csv", delimiter=",")
     off[:, 1] *= design.drag_factor

@@ -9,6 +9,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
 
 from flutter import Fin, flutter_speed
 from materials import MATERIALS
@@ -77,7 +78,7 @@ def plot_reports(output, data, base, thin, drag_cases, sweeps):
     _markers(ax[0], s)
     ax[0].set_ylabel("Velocidad [m/s]")
     ax[0].set_title("Frontera de flutter frente a velocidad relativa")
-    ax[0].legend(ncol=4, fontsize=8)
+    ax[0].legend(loc="center right", ncol=2, fontsize=8)
     ax[1].plot(t, trace["flutter_ratio"], color=COLORS[0])
     ax[1].axhline(limits["flutter_ratio"], color=COLORS[1], linestyle="--", label="Límite")
     index = int(np.argmin(trace["flutter_ratio"]))
@@ -149,10 +150,14 @@ def plot_reports(output, data, base, thin, drag_cases, sweeps):
         ])
     fig, axis = plt.subplots(figsize=(9, 5))
     image = axis.pcolormesh(scale_thickness, scales, np.asarray(matrix), shading="auto", cmap="viridis")
-    axis.contour(scale_thickness, scales, np.asarray(matrix), levels=[limits["flutter_ratio"]], colors="white")
+    axis.contour(scale_thickness, scales, np.asarray(matrix),
+                 levels=[limits["flutter_ratio"]], colors="white")
     axis.set(xlabel="Espesor [mm]", ylabel="Escala de planta", title="Mapa geométrico · mínimo Vf/V")
     axis.text(0.02, 0.02, "Escala uniforme: solo cambia t/cr", transform=axis.transAxes, color="white")
     fig.colorbar(image, ax=axis, label="Mínimo Vf/V")
+    axis.legend(handles=[
+        Line2D([], [], color="white", label=f"Límite Vf/V = {limits['flutter_ratio']:g}"),
+    ], loc="upper right")
     save(fig, output, "05-geometry-map.png")
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))

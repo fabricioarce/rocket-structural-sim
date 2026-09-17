@@ -6,6 +6,7 @@ test_required_thickness_inverts_flutter_speed (test_flutter.FlutterTests.test_re
 test_thickness_scaling (test_flutter.FlutterTests.test_thickness_scaling) ... ok
 test_uniform_planform_scaling (test_flutter.FlutterTests.test_uniform_planform_scaling) ... ok
 test_zero_pressure_rejected (test_flutter.FlutterTests.test_zero_pressure_rejected) ... ok
+test_baseline_dry_aggregate_properties (test_simulation.SimulationTests.test_baseline_dry_aggregate_properties) ... ok
 test_build_flight_smoke (test_simulation.SimulationTests.test_build_flight_smoke) ... ok
 test_design_validation (test_simulation.SimulationTests.test_design_validation) ... ok
 test_fin_mass_bookkeeping (test_simulation.SimulationTests.test_fin_mass_bookkeeping) ... ok
@@ -21,6 +22,6 @@ test_robust_selection_requires_all_scenarios (test_study.StudyTests.test_robust_
 test_thickness_sweep_monotonic (test_study.StudyTests.test_thickness_sweep_monotonic) ... ok
 
 ----------------------------------------------------------------------
-Ran 21 tests in 0.761s
+Ran 22 tests in 0.761s
 
 OK

@@ -63,9 +63,8 @@ def load_config(path):
 def run(config_path, output, quick=False):
     config, base, limits = load_config(config_path)
     output.mkdir(parents=True, exist_ok=True)
-    for path in output.iterdir():
-        if path.is_file():
-            path.unlink()
+    for path in output.glob("case-*.csv"):
+        path.unlink()
     check = subprocess.run([sys.executable, "-m", "unittest", "discover", "-v"], cwd=ROOT,
                            text=True, capture_output=True)
     (output / "tests.txt").write_text(check.stdout + check.stderr, encoding="utf-8")
@@ -122,7 +121,8 @@ def run(config_path, output, quick=False):
         {"name": "RocketPy: Flight, coordenadas y velocidad relativa", "url": "https://docs.rocketpy.org/en/latest/reference/classes/Flight.html", "retrieved": "2026-09-15"},
         {"name": "Bennett (2023): flutter corregido y ejemplo de 1425 ft/s", "url": "https://www.nakka-rocketry.net/articles/Calculating_Fin_Flutter_Velocity_Bennett-12-23.pdf", "retrieved": "2026-09-15"},
         {"name": "OpenRocket: no incluye análisis de flutter", "url": "https://wiki.openrocket.info/Third-Party_Compatibility", "retrieved": "2026-09-15"},
-        {"name": "Apogee Components: Peak of Flight, flutter de aletas", "url": "https://www.apogeerockets.com/Peak-of-Flight/Newsletter", "retrieved": "2026-09-15"},
+        {"name": "Wood Handbook FPL-GTR-190", "url": "https://www.fpl.fs.usda.gov/documnts/fplgtr/fpl_gtr190.pdf", "retrieved": "2026-09-17"},
+        {"name": "MatWeb", "url": "https://www.matweb.com/", "retrieved": "2026-09-17"},
     ]
     manifest = {str(p.relative_to(DATA)): hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in sorted(DATA.rglob("*")) if p.is_file()}

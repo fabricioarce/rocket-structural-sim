@@ -33,10 +33,6 @@ assert.equal(elements.get('design-table').children.length, results.ranked_design
 assert(elements.get('case-plot').innerHTML.includes('<svg'));
 if (results.best_sampled_design) assert(elements.get('best').textContent.startsWith('Mejor caso'));
 else assert(elements.get('best').textContent.startsWith('Ninguno'));
-elements.get('stress-limit').value = '0.01';
-elements.get('stress-limit').handlers.input();
-assert(elements.get('best').textContent.startsWith('Ninguno'));
-elements.get('stress-limit').value = String(data.limits.stress_mpa);
 elements.get('flutter-limit').value = '1000';
 elements.get('flutter-limit').handlers.input();
 assert(elements.get('best').textContent.startsWith('Ninguno'));
@@ -44,11 +40,11 @@ elements.get('flutter-limit').value = String(data.limits.flutter_ratio);
 elements.get('payload-limit').value = '1000';
 elements.get('payload-limit').handlers.input();
 assert(elements.get('best').textContent.startsWith('Ninguno'));
-elements.get('stress-limit').value = '-1';
-elements.get('stress-limit').handlers.input();
+elements.get('flutter-limit').value = '-1';
+elements.get('flutter-limit').handlers.input();
 assert(elements.get('best').textContent.startsWith('Introduce'));
 for (const row of data.cases) {
-  for (const metric of ['altitude_agl_m', 'airspeed_m_s', 'stress_mpa', 'flutter_ratio']) {
+  for (const metric of ['altitude_agl_m', 'airspeed_m_s', 'flutter_speed_m_s', 'flutter_ratio']) {
     elements.get('case-select').value = row.case_id;
     elements.get('metric-select').value = metric;
     elements.get('case-select').handlers.change();

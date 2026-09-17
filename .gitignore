@@ -12,6 +12,8 @@ outputs/*
 !outputs/baseline.csv
 !outputs/critical-diagram.csv
 !outputs/thin-fin.csv
+!outputs/thickness-sweep.csv
+!outputs/material-sweep.csv
 !outputs/tests.txt
 outputs-*/
 structural_loads_calisto.png

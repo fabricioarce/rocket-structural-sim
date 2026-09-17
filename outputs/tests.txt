@@ -1,24 +1,15 @@
 test_bennett_2023_worked_example (test_flutter.FlutterTests.test_bennett_2023_worked_example) ... ok
+test_flutter_history_argmin (test_flutter.FlutterTests.test_flutter_history_argmin) ... ok
 test_nonphysical_geometry_rejected (test_flutter.FlutterTests.test_nonphysical_geometry_rejected) ... ok
 test_pressure_and_stiffness_scaling (test_flutter.FlutterTests.test_pressure_and_stiffness_scaling) ... ok
+test_required_thickness_inverts_flutter_speed (test_flutter.FlutterTests.test_required_thickness_inverts_flutter_speed) ... ok
 test_thickness_scaling (test_flutter.FlutterTests.test_thickness_scaling) ... ok
+test_uniform_planform_scaling (test_flutter.FlutterTests.test_uniform_planform_scaling) ... ok
 test_zero_pressure_rejected (test_flutter.FlutterTests.test_zero_pressure_rejected) ... ok
-test_baseline_dry_aggregate_properties (test_simulation.SimulationTests.test_baseline_dry_aggregate_properties) ... ok
-test_component_forces_match_rocketpy_at_solver_nodes (test_simulation.SimulationTests.test_component_forces_match_rocketpy_at_solver_nodes) ... ok
-test_flight_cut_equilibrium (test_simulation.SimulationTests.test_flight_cut_equilibrium) ... ok
-test_mass_and_cg_match_rocketpy_during_burn (test_simulation.SimulationTests.test_mass_and_cg_match_rocketpy_during_burn) ... ok
-test_mass_nodes_stay_inside_declared_bounds (test_simulation.SimulationTests.test_mass_nodes_stay_inside_declared_bounds) ... ok
-test_rail_loads_not_silently_treated_as_free_flight (test_simulation.SimulationTests.test_rail_loads_not_silently_treated_as_free_flight) ... ok
-test_axial_load_is_section_dependent (test_structural_loads.AnalyticalTests.test_axial_load_is_section_dependent) ... ok
-test_center_force_two_end_masses (test_structural_loads.AnalyticalTests.test_center_force_two_end_masses) ... ok
-test_missing_mass_model_rejected (test_structural_loads.AnalyticalTests.test_missing_mass_model_rejected) ... ok
-test_pure_couple_closes_both_ends (test_structural_loads.AnalyticalTests.test_pure_couple_closes_both_ends) ... ok
-test_stress_combines_at_same_section (test_structural_loads.AnalyticalTests.test_stress_combines_at_same_section) ... ok
-test_translation_of_coordinates_preserves_loads (test_structural_loads.AnalyticalTests.test_translation_of_coordinates_preserves_loads) ... ok
-test_two_bending_planes (test_structural_loads.AnalyticalTests.test_two_bending_planes) ... ok
-test_free_body_closes_bending (test_structural_loads.LegacyRegressionTests.test_free_body_closes_bending) ... ok
-test_free_body_closes_shear (test_structural_loads.LegacyRegressionTests.test_free_body_closes_shear) ... ok
-test_invalid_tube_rejected (test_structural_loads.LegacyRegressionTests.test_invalid_tube_rejected) ... ok
+test_build_flight_smoke (test_simulation.SimulationTests.test_build_flight_smoke) ... ok
+test_design_validation (test_simulation.SimulationTests.test_design_validation) ... ok
+test_fin_mass_bookkeeping (test_simulation.SimulationTests.test_fin_mass_bookkeeping) ... ok
+test_payload_shifts_cg_toward_payload_station (test_simulation.SimulationTests.test_payload_shifts_cg_toward_payload_station) ... ok
 test_bad_model_domain_not_feasible (test_study.StudyTests.test_bad_model_domain_not_feasible) ... ok
 test_grid_rejects_duplicate_scenarios (test_study.StudyTests.test_grid_rejects_duplicate_scenarios) ... ok
 test_grid_updates_requested_parameters (test_study.StudyTests.test_grid_updates_requested_parameters) ... ok
@@ -27,8 +18,9 @@ test_missing_scenario_not_feasible (test_study.StudyTests.test_missing_scenario_
 test_no_feasible_design_returns_none (test_study.StudyTests.test_no_feasible_design_returns_none) ... ok
 test_reject_best_altitude_when_over_limit (test_study.StudyTests.test_reject_best_altitude_when_over_limit) ... ok
 test_robust_selection_requires_all_scenarios (test_study.StudyTests.test_robust_selection_requires_all_scenarios) ... ok
+test_thickness_sweep_monotonic (test_study.StudyTests.test_thickness_sweep_monotonic) ... ok
 
 ----------------------------------------------------------------------
-Ran 29 tests in 0.462s
+Ran 21 tests in 0.761s
 
 OK

@@ -3,19 +3,16 @@
 Uso, desde la raíz del repositorio:
   uv venv .venv-docs && uv pip install --python .venv-docs/bin/python typst
   .venv-docs/bin/python docs/pdf/build_pdf.py
-  .venv-docs/bin/python -c "import typst; typst.compile('docs/pdf/guia-simulador-cohetes.typ', output='docs/pdf/guia-simulador-cohetes.pdf')"
+  .venv-docs/bin/python -c "import typst; typst.compile('docs/pdf/guia-simulador-cohetes.typ', root='.', output='docs/pdf/guia-simulador-cohetes.pdf')"
 
 Entorno separado del simulador (typst no es una dependencia de cálculo).
 Las siete imágenes se referencian directamente desde outputs/ (ruta relativa
 ../../outputs/), sin duplicar los PNG dentro de docs/pdf/.
 
-Las fórmulas LaTeX de los capítulos 01 y 02 se traducen a mano a sintaxis de
-matemáticas de Typst (listas MATH_01/MATH_02, en el mismo orden en que
-aparecen en cada archivo) porque una conversión automática de LaTeX a Typst
-no es fiable para fórmulas físicas; todo lo demás (encabezados, párrafos,
-listas, tablas, negritas, cursivas, enlaces, código, imágenes) se convierte
-mecánicamente desde el Markdown fuente, que sigue siendo la referencia
-principal en docs/.
+Las fórmulas LaTeX delimitadas por \\[ \\] de los capítulos 01 y 02 se traducen
+a mano a sintaxis de Typst (listas MATH_01/MATH_02, en el mismo orden en que
+aparecen en cada archivo) porque una conversión automática no es fiable para
+fórmulas físicas. El Markdown de docs/ sigue siendo la referencia principal.
 """
 
 import re
@@ -26,32 +23,30 @@ DOCS = ROOT / "docs"
 OUT = Path(__file__).resolve().parent
 
 MATH_01 = [
-    r'$ v_("media") = (Delta x)/(Delta t), quad a_("media") = (Delta v)/(Delta t) $',
+    r'$ bold(v)_("media") = (Delta bold(r))/(Delta t) $',
+    r'$ bold(a)_("media") = (Delta bold(v))/(Delta t) $',
     r'$ V = sqrt(v_x^2 + v_y^2 + v_z^2) $',
-    r'$ h_("AGL") = h_("ASL") - 1400 "m" $',
-    r'$ W = m g $',
     r'$ sum bold(F)_("externas") = m bold(a) $',
     r'$ bold(v)_("rel") = bold(v)_("cohete") - bold(v)_("aire"), quad V_("rel") = abs(bold(v)_("rel")) $',
     r'$ q = 1/2 rho V_("rel")^2 $',
     r'$ D = q C_D A_("ref") $',
     r'$ "Ma" = V_("rel") / a_s $',
-    r'$ z_("CG") = (sum_i m_i z_i) / (sum_i m_i) $',
+    r'$ a_s = sqrt(gamma p/rho) $',
+    r'$ V_("f") "∝" a_s sqrt(1/p), quad V_("f") "∝" 1/sqrt(rho) $',
 ]
 
 MATH_02 = [
-    r'$ M = F d_perp $',
-    r'$ sum bold(F)_("externas") + sum_i (-m_i bold(a)) = 0 $',
-    r'$ bold(f)_(i,"inercial") = -m_i (bold(a) + bold(alpha)_("ang") times bold(r)_i) $',
-    r'$ I_("masa") = sum_i m_i r_(perp,i)^2 $',
-    r'$ A_("material") = pi (r_o^2 - r_i^2), quad I_A = pi/4 (r_o^4 - r_i^4) $',
-    r'$ sigma_("axial") = N / A_("material") $',
-    r'$ abs(sigma_("flexion"))_("extremo") = (abs(M) r_o) / I_A $',
-    r'$ sigma_("max,seccion")(z,t) = abs(N (z,t)) / A_("material") + (sqrt(M_x (z,t)^2 + M_y (z,t)^2) r_o) / I_A $',
+    r'$ tau = G gamma_s $',
     r'$ C_x = (c_r^2 + c_r c_t + c_t^2 + s(c_r+2c_t)) / (3(c_r+c_t)), quad epsilon = C_x/c_r - 1/4 $',
     (r'$ V_f = a_s sqrt(N_v / D_v), quad '
      r'N_v = G ("AR"+2) (delta/c_r)^3, quad '
      r'D_v = (24 epsilon gamma)/pi dot p dot "AR"^3 dot (1+lambda)/2, quad gamma=1.4 $'),
+    r'$ V_("f") "∝" (t/c_r)^(3/2), quad V_("f") "∝" G^(1/2), quad V_("f") "∝" p^(-1/2) $',
     r'$ R_f (t) = (V_f (t)) / (V_("rel") (t)) $',
+    (r'$ t_("req") = c_r ((V_("objetivo")/a_s)^2 '
+     r'dot (24 epsilon gamma/pi) dot p dot "AR"^3 dot (1+lambda)/2 '
+     r'/ (G dot ("AR"+2)))^(1/3) $'),
+    r'$ V_f -> V_f k^(-3/2) $',
     (r'$ a_s^2 = gamma p/rho, quad '
      r'V_f^2 = a_s^2 (G B)/p = (gamma G B)/rho, quad '
      r'R_f^2 = (gamma G B)/(rho V_("rel")^2) = (gamma G B)/(2q) $'),
@@ -59,7 +54,7 @@ MATH_02 = [
 
 CHAPTERS = [
     ("01-fisica-desde-cero.md", MATH_01),
-    ("02-estructuras-y-flutter.md", MATH_02),
+    ("02-flutter-desde-cero.md", MATH_02),
     ("03-programacion-desde-cero.md", []),
     ("05-graficas-explicadas.md", []),
 ]
@@ -70,6 +65,29 @@ def esc(text):
     return re.sub(r"([#$@])", r"\\\1", text)
 
 
+def latex_inline(text):
+    """Reduce comandos LaTeX frecuentes a expresiones matemáticas de Typst."""
+    text = re.sub(r"\\(?:mathrm|text)\{([^{}]*)\}", r'"\1"', text)
+    text = re.sub(r"\\boldsymbol\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\boldsymbol\s*", "", text)
+    replacements = {
+        r"\times": " dot ",
+        r"\propto": " ∝ ",
+        r"\ge": ">=",
+        r"\le": "<=",
+        r"\rho": "rho",
+        r"\gamma": "gamma",
+        r"\lambda": "lambda",
+        r"\epsilon": "epsilon",
+        r"\tau": "tau",
+        r"\pi": "pi",
+        r"\ ": " ",
+    }
+    for source, target in replacements.items():
+        text = text.replace(source, target)
+    return text
+
+
 def inline(text):
     """Convierte negrita/cursiva/enlaces/código en una línea o celda a sintaxis Typst."""
     parts = re.split(r"(`[^`]*`)", text)
@@ -77,6 +95,11 @@ def inline(text):
         if part.startswith("`"):
             continue
         part = esc(part)
+        part = re.sub(
+            r"\\\((.+?)\\\)",
+            lambda match: f"$ {latex_inline(match.group(1))} $",
+            part,
+        )
         part = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'#link("\2")[\1]', part)
         part = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", part)
         part = re.sub(r"\*\*(.+?)\*\*", r"*\1*", part)
@@ -123,9 +146,10 @@ def convert(md_text, math_queue):
             out.append("")
             i += 1
             continue
-        if line.startswith("$$"):
+        if line.startswith("$$") or line.startswith(r"\["):
+            closing = "$$" if line.startswith("$$") else r"\]"
             end = i + 1
-            while not lines[end].startswith("$$"):
+            while not lines[end].startswith(closing):
                 end += 1
             out.append(math_queue[math_i])
             math_i += 1

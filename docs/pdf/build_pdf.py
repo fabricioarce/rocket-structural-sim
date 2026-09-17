@@ -70,7 +70,12 @@ def latex_inline(text):
     text = re.sub(r"\\(?:mathrm|text)\{([^{}]*)\}", r'"\1"', text)
     text = re.sub(r"\\boldsymbol\{([^{}]*)\}", r"\1", text)
     text = re.sub(r"\\boldsymbol\s*", "", text)
+    text = re.sub(r"\\sqrt\{([^{}]*)\}", r"sqrt(\1)", text)
+    text = re.sub(r"\\frac\{([^{}]*)\}\{([^{}]*)\}", r"(\1)/(\2)", text)
+    text = re.sub(r"([_^])\{([^{}]*)\}", r"\1(\2)", text)
     replacements = {
+        r"\min": "min",
+        r"\,": " ",
         r"\times": " dot ",
         r"\propto": " ∝ ",
         r"\ge": ">=",
@@ -97,7 +102,7 @@ def inline(text):
         part = esc(part)
         part = re.sub(
             r"\\\((.+?)\\\)",
-            lambda match: f"$ {latex_inline(match.group(1))} $",
+            lambda match: f"${latex_inline(match.group(1)).strip()}$",
             part,
         )
         part = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'#link("\2")[\1]', part)
@@ -195,7 +200,13 @@ def convert(md_text, math_queue):
                                         (lines[end].startswith("  ") and lines[end].strip())):
                 end += 1
             block = lines[i:end]
-            out.append("\n".join(re.sub(r"^(\s*)(-|\d+\.)\s+(.*)$", lambda m: f"{m.group(1)}{m.group(2)} {inline(m.group(3))}", ln) for ln in block))
+            items = []
+            for ln in block:
+                if re.match(r"^\s*(-|\d+\.)\s", ln):
+                    items.append(ln)
+                else:
+                    items[-1] += " " + ln.strip()
+            out.append("\n".join(re.sub(r"^(\s*)(-|\d+\.)\s+(.*)$", lambda m: f"{m.group(1)}{m.group(2)} {inline(m.group(3))}", ln) for ln in items))
             i = end
             continue
         para = [line]

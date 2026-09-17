@@ -15,6 +15,7 @@ def verify(output):
     data = json.loads((output / "results.json").read_text(encoding="utf-8"))
     assert data["checks"]["unit_tests_passed"]
     assert data["checks"]["refinement_below_5_percent"]
+    assert data["checks"]["algebraic_vs_resimulated_thin_fin"]
     for case in data["cases"]:
         with (output / f"{case['case_id']}.csv").open(encoding="utf-8") as stream:
             records = list(csv.DictReader(stream))
@@ -25,16 +26,15 @@ def verify(output):
         assert times[0] > case["rail_exit_s"]
         assert times[-1] <= case["apogee_time_s"]
         assert len(records) == case["samples"]
-        np.testing.assert_allclose(max(float(r["stress_mpa"]) for r in records), case["stress_mpa"])
         np.testing.assert_allclose(min(float(r["flutter_ratio"]) for r in records), case["min_flutter_ratio"])
     best, ranked = select_best(data["cases"], Limits(**data["config"]["limits"]), len(data["config"]["winds_m_s"]))
     assert best == data["best_sampled_design"]
     assert ranked == data["ranked_designs"]
-    with (output / "critical-diagram.csv").open(encoding="utf-8") as stream:
-        cuts = list(csv.DictReader(stream))
-    for cut in (cuts[0], cuts[-1]):
-        for key in ("axial_n", "shear_n", "moment_nm", "stress_mpa"):
-            assert abs(float(cut[key])) < 1e-7, (key, cut[key])
+    sweep = list(csv.DictReader((output / "thickness-sweep.csv").open(encoding="utf-8")))
+    for slug in data["config"]["materials"]:
+        ratios = [float(row[slug]) for row in sweep]
+        assert all(b > a for a, b in zip(ratios, ratios[1:]))
+    assert (output / "material-sweep.csv").is_file()
     images = list(output.glob("*.png"))
     assert len(images) == 7
     for image in images:

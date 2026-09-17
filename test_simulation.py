@@ -1,54 +1,35 @@
 import unittest
 
-import numpy as np
-
-from simulation import Design, build_flight, dry_mass_nodes
-from structural_loads import TubeSection, analyze_time_step, get_point_loads, get_surface_stations
+from simulation import Design, build_flight, dry_properties
 
 
 class SimulationTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.flight = build_flight(Design(payload_kg=3, fin_scale=1.15))
-        cls.surfaces = get_surface_stations(cls.flight.rocket)
+    def test_design_validation(self):
+        with self.assertRaises(ValueError):
+            Design(fin_thickness_m=0)
+        with self.assertRaises(ValueError):
+            Design(payload_station_m=-2)
 
-    def test_mass_and_cg_match_rocketpy_during_burn(self):
-        f = self.flight
-        for t in (0, 1, 2, 3.9, 5):
-            positions, masses = f.structural_mass_model(t)
-            self.assertAlmostEqual(masses.sum(), f.rocket.total_mass(t), places=10)
-            self.assertAlmostEqual(np.dot(masses, positions)/masses.sum(), f.rocket.center_of_mass(t), delta=1e-8)
-
-    def test_mass_nodes_stay_inside_declared_bounds(self):
-        f = self.flight
-        for t in (0, 1, 2, 3.9, 5):
-            positions, _ = f.structural_mass_model(t)
-            self.assertGreaterEqual(positions.min(), f.structural_bounds[0])
-            self.assertLessEqual(positions.max(), f.structural_bounds[1])
+    def test_fin_mass_bookkeeping(self):
+        base = Design()
+        thin = Design(fin_thickness_m=base.fin_thickness_m / 2)
+        self.assertAlmostEqual(thin.fin_mass, base.fin_mass / 2)
 
     def test_baseline_dry_aggregate_properties(self):
-        positions, masses = dry_mass_nodes(Design())
-        self.assertAlmostEqual(masses.sum(), 14.426, places=10)
-        self.assertAlmostEqual(np.dot(masses, positions), 0, places=10)
-        self.assertAlmostEqual(np.dot(masses, positions**2), 6.321, places=10)
+        mass, center, i11, _, _ = dry_properties(Design())
+        self.assertAlmostEqual(mass, 14.426)
+        self.assertAlmostEqual(center, 0.0, places=9)
+        self.assertAlmostEqual(i11, 6.321, places=9)
 
-    def test_component_forces_match_rocketpy_at_solver_nodes(self):
-        f = self.flight
-        times = np.asarray(f.solution)[:, 0]
-        for target in (0.5, 1, 3, 5):
-            t = times[np.argmin(abs(times-target))]
-            loads = get_point_loads(f, t, self.surfaces)
-            reconstructed = sum((item["force"] for item in loads))
-            np.testing.assert_allclose(reconstructed[:2], [f.R1(t), f.R2(t)], rtol=1e-5, atol=1e-6)
+    def test_payload_shifts_cg_toward_payload_station(self):
+        base = build_flight(Design(), max_time_step=0.3)
+        loaded = build_flight(Design(payload_kg=3, payload_station_m=0.45), max_time_step=0.3)
+        self.assertGreater(loaded.rocket.center_of_mass(0), base.rocket.center_of_mass(0))
 
-    def test_rail_loads_not_silently_treated_as_free_flight(self):
-        with self.assertRaisesRegex(ValueError, "riel"):
-            analyze_time_step(self.flight, 0.1, self.surfaces, 2.533, TubeSection(0.0635, 0.0015))
-
-    def test_flight_cut_equilibrium(self):
-        r = analyze_time_step(self.flight, 1, self.surfaces, 2.533, TubeSection(0.0635, 0.0015))
-        np.testing.assert_allclose(r["diagram"]["residual_force"], 0, atol=1e-8)
-        np.testing.assert_allclose(r["diagram"]["residual_moment"], 0, atol=1e-8)
+    def test_build_flight_smoke(self):
+        flight = build_flight(Design(), max_time_step=0.3)
+        self.assertGreater(flight.apogee_time, flight.out_of_rail_time)
+        self.assertEqual(flight.design, Design())
 
 
 if __name__ == "__main__":

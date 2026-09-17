@@ -1,0 +1,6 @@
+slug,nombre,min_ratio,shear_pa,density_kg_m3,required_thickness_mm
+aluminio_6061,Aluminio 6061,2.038196278869739,26000000000.0,2700,2.1655286166813177
+fibra_vidrio_g10,Fibra de vidrio G10/FR4 laminada,0.8133163462203941,4140000000.0,1850,3.995350911880475
+fibra_carbono_laminada,"Fibra de carbono, tejido 0/90 (cortante en el plano G12)",0.8479409068759322,4500000000.0,1600,3.8858336537182665
+contrachapado_abedul,Contrachapado de abedul aeronáutico,0.33443240376212374,700000000.0,650,7.225296879337461
+acrilico_policarbonato,Acrílico/policarbonato,0.3997231768649616,1000000000.0,1200,6.4153700129420566

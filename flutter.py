@@ -5,9 +5,8 @@ páginas 5–9. Consultado 2026-09-15:
 https://www.nakka-rocketry.net/articles/Calculating_Fin_Flutter_Velocity_Bennett-12-23.pdf
 
 Vf/a = sqrt(G*(AR+2)*(t/cr)^3 / ((24*epsilon*gamma/pi)*p*AR^3*(1+lambda)/2)).
-epsilon = Cx/cr - 1/4; gamma=1.4. Presión y G deben usar las mismas unidades.
-Se comprueba contra el ejemplo publicado de 1425 ft/s; no se utiliza la forma
-antigua con la doble división por dos que sobreestima Vf por sqrt(2).
+Presión y G deben usar las mismas unidades. Vf crece con la altitud porque la
+presión disminuye. Una escala uniforme de la planta solo cambia t/cr.
 
 Aletas trapezoidales homogéneas, espesor constante, propiedades efectivas
 isótropas. No resuelve laminados, modos, uniones, amortiguamiento ni divergencia.
@@ -40,18 +39,52 @@ class Fin:
         return (self.root_m + self.tip_m) * self.span_m / 2
 
     @property
+    def aspect_ratio(self):
+        return self.span_m ** 2 / self.area_m2
+
+    @property
+    def taper(self):
+        return self.tip_m / self.root_m
+
+    @property
     def epsilon(self):
         r, t, s = self.root_m, self.tip_m, self.sweep_m
-        centroid = (r*r + r*t + t*t + s*(r+2*t)) / (3*(r+t))
+        centroid = (r * r + r * t + t * t + s * (r + 2 * t)) / (3 * (r + t))
         return centroid / r - 0.25
 
 
-def flutter_speed(fin, pressure_pa, sound_speed_m_s):
+def _atmosphere_inputs(pressure_pa, sound_speed_m_s):
     p, a = np.broadcast_arrays(np.asarray(pressure_pa, float), np.asarray(sound_speed_m_s, float))
     if not np.all(np.isfinite(p)) or not np.all(np.isfinite(a)) or np.any(p <= 0) or np.any(a <= 0):
         raise ValueError("Presión y velocidad del sonido deben ser positivas y finitas")
-    ar = fin.span_m**2 / fin.area_m2
-    taper = fin.tip_m / fin.root_m
+    return p, a
+
+
+def flutter_speed(fin, pressure_pa, sound_speed_m_s):
+    p, a = _atmosphere_inputs(pressure_pa, sound_speed_m_s)
     dn_over_p0 = 24 * fin.epsilon * 1.4 / np.pi
-    return a * np.sqrt(fin.shear_pa * (ar+2) * (fin.thickness_m/fin.root_m)**3
-                       / (dn_over_p0 * p * ar**3 * (taper+1)/2))
+    return a * np.sqrt(
+        fin.shear_pa * (fin.aspect_ratio + 2) * (fin.thickness_m / fin.root_m) ** 3
+        / (dn_over_p0 * p * fin.aspect_ratio ** 3 * (fin.taper + 1) / 2)
+    )
+
+
+def required_thickness(fin, pressure_pa, sound_speed_m_s, target_speed_m_s):
+    p, a = _atmosphere_inputs(pressure_pa, sound_speed_m_s)
+    target, _ = np.broadcast_arrays(np.asarray(target_speed_m_s, float), p)
+    if not np.all(np.isfinite(target)) or np.any(target <= 0):
+        raise ValueError("La velocidad objetivo debe ser positiva y finita")
+    dn_over_p0 = 24 * fin.epsilon * 1.4 / np.pi
+    return fin.root_m * (
+        (target / a) ** 2 * dn_over_p0 * p * fin.aspect_ratio ** 3 * (fin.taper + 1) / 2
+        / (fin.shear_pa * (fin.aspect_ratio + 2))
+    ) ** (1 / 3)
+
+
+def flutter_history(fin, pressure, sound, airspeed):
+    vf = flutter_speed(fin, pressure, sound)
+    speed = np.asarray(airspeed, float)
+    if not np.all(np.isfinite(speed)) or np.any(speed < 0):
+        raise ValueError("La velocidad relativa debe ser finita y no negativa")
+    ratio = vf / np.maximum(speed, 1e-9)
+    return {"flutter_speed": vf, "ratio": ratio, "critical_index": int(np.argmin(ratio))}

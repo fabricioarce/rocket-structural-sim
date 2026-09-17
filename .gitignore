@@ -10,8 +10,8 @@ outputs/*
 !outputs/cases.csv
 !outputs/case-*.csv
 !outputs/baseline.csv
-!outputs/critical-diagram.csv
 !outputs/thin-fin.csv
+!outputs/thickness-sweep.csv
+!outputs/material-sweep.csv
 !outputs/tests.txt
 outputs-*/
-structural_loads_calisto.png

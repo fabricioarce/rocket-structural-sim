@@ -4,7 +4,7 @@
   numbering: "1",
   header: context {
     if counter(page).get().first() > 1 {
-      text(size: 8pt, fill: rgb("#777777"))[Simulador de cohetes con análisis preliminar de cargas — Guía complementaria]
+      text(size: 8pt, fill: rgb("#777777"))[Estudio de flutter de aletas para un cohete de alta potencia — Guía]
       line(length: 100%, stroke: 0.4pt + rgb("#cccccc"))
     }
   },
@@ -43,11 +43,11 @@
 // --- Portada ---
 #align(center)[
   #v(2.5cm)
-  #text(size: 12pt, fill: rgb("#0b5a86"))[ROCKETPY + CARGAS PRELIMINARES + FIN FLUTTER]
+  #text(size: 12pt, fill: rgb("#0b5a86"))[ROCKETPY + FIN FLUTTER]
   #v(0.6cm)
   #text(size: 27pt, weight: "bold")[Guía complementaria del proyecto]
   #v(0.2cm)
-  #text(size: 16pt)[Física, estructuras, programación y lectura de gráficas]
+  #text(size: 16pt)[Física, flutter, programación y lectura de gráficas]
   #v(1.4cm)
   #block(width: 85%, fill: rgb("#fff4e6"), stroke: 1pt + rgb("#e8a33d"), radius: 5pt, inset: 14pt)[
     #text(size: 10.5pt)[
@@ -57,7 +57,7 @@
     ]
   ]
   #v(1.6cm)
-  #text(size: 11pt)[Capítulos incluidos en este PDF: 01 · Física desde cero — 02 · Estructuras y flutter —]
+  #text(size: 11pt)[Capítulos incluidos en este PDF: 01 · Física desde cero — 02 · Flutter desde cero —]
   #v(0.1cm)
   #text(size: 11pt)[03 · Programación desde cero — 05 · Todas las gráficas, explicadas desde sus ejes]
   #v(1.6cm)

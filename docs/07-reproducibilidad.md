@@ -10,6 +10,21 @@ Para usar el informe interactivo, descarga el repositorio completo y abre `outpu
 
 El HTML no necesita conexión para mostrar los resultados ni filtrar los casos. Los enlaces a fuentes externas sí requieren internet.
 
+Si solo necesitas los capítulos 01, 02, 03 y 05 en un único archivo para enviarlo a alguien que ayuda con la redacción, descarga directamente [`docs/pdf/guia-simulador-cohetes.pdf`](pdf/guia-simulador-cohetes.pdf) — no necesita nada de lo anterior, solo un lector de PDF.
+
+### Regenerar el PDF (opcional, solo si cambian los capítulos 01/02/03/05)
+
+El PDF se genera con [Typst](https://typst.app), en un entorno separado del simulador (Typst no es una dependencia de cálculo):
+
+```bash
+uv venv .venv-docs
+uv pip install --python .venv-docs/bin/python typst
+.venv-docs/bin/python docs/pdf/build_pdf.py
+.venv-docs/bin/python -c "import typst; typst.compile('docs/pdf/guia-simulador-cohetes.typ', output='docs/pdf/guia-simulador-cohetes.pdf', root='.')"
+```
+
+`build_pdf.py` convierte el Markdown de esos cuatro capítulos a Typst automáticamente (encabezados, tablas, listas, código, imágenes, enlaces), pero **las fórmulas físicas de los capítulos 01 y 02 están escritas a mano** en las listas `MATH_01`/`MATH_02` del propio script, en el mismo orden en que aparecen en cada archivo — una conversión automática de LaTeX a la sintaxis matemática de Typst no es lo bastante confiable para fórmulas de física. Si editas una fórmula en el Markdown, edita también su equivalente en `build_pdf.py`, y vuelve a compilar. Las siete imágenes se referencian directamente desde `outputs/`, sin duplicarlas.
+
 ## 2. Entorno de referencia
 
 - Python **3.14.7**, comprobado en Linux.

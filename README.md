@@ -22,6 +22,12 @@ Proyecto educativo que usa **RocketPy para simular el vuelo** y añade una recon
 
 **Ruta sugerida para el equipo de redacción:** 00 → 01 → 02 → 05 → 06. Consulta 03 y 04 cuando necesites explicar la implementación. No copies una fórmula o conclusión que no puedas explicar con tus propias palabras.
 
+### PDF para compartir con quienes ayudan con la redacción
+
+[**docs/pdf/guia-simulador-cohetes.pdf**](docs/pdf/guia-simulador-cohetes.pdf) reúne en un solo archivo, con las siete figuras incluidas, los capítulos **01 (física desde cero), 02 (estructuras y flutter), 03 (programación desde cero) y 05 (todas las gráficas explicadas)**. Pensado para enviar directamente a compañeros que solo necesitan entender el contenido, sin clonar el repositorio ni instalar nada — un lector de PDF basta.
+
+Los capítulos 00, 04, 06, 07 y 08 (guía del equipo, mapa del código, metodología, reproducibilidad y glosario) no están en ese PDF; siguen solo en `docs/` para quienes trabajen directamente con el repositorio. El PDF se genera con Typst a partir del Markdown de `docs/`; el código fuente (`docs/pdf/build_pdf.py`, `docs/pdf/preamble.typ`) queda en el repositorio para volver a generarlo si los capítulos cambian.
+
 ## Ver resultados sin instalar Python
 
 Las imágenes y los datos de una ejecución de referencia están incluidos en [outputs](outputs/). Puedes leer [la guía ilustrada](docs/05-graficas-explicadas.md) directamente en GitHub.

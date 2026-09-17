@@ -7,18 +7,9 @@
     "fin_shear_pa": 26000000000.0,
     "wind_m_s": 4.0,
     "drag_factor": 1.0,
-    "payload_station_m": 0.45,
-    "drag_station_m": 0.8
-  },
-  "section": {
-    "outer_radius": 0.0635,
-    "thickness": 0.0015,
-    "youngs_modulus": 68900000000.0,
-    "shear_modulus": 26000000000.0,
-    "yield_strength": 276000000.0
+    "payload_station_m": 0.45
   },
   "limits": {
-    "stress_mpa": 4.0,
     "flutter_ratio": 1.25,
     "stability_cal": 1.0,
     "rail_speed_m_s": 20.0,
@@ -29,5 +20,12 @@
   "fin_scales": [0.85, 1.0, 1.15],
   "winds_m_s": [0.0, 4.0],
   "samples": 180,
-  "mass_nodes": 32
+  "thickness_sweep_mm": [1, 1.5, 2, 2.5, 3, 4, 5, 6],
+  "materials": [
+    "aluminio_6061",
+    "fibra_vidrio_g10",
+    "fibra_carbono_laminada",
+    "contrachapado_abedul",
+    "acrilico_policarbonato"
+  ]
 }

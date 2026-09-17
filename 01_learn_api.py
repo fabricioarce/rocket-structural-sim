@@ -99,7 +99,7 @@ flight = Flight(
 )
 
 # ---------------------------------------------------------------------------
-# Lo que nos interesa para el módulo de cargas estructurales:
+# Lo que nos interesa para el estudio de flutter:
 # Flight expone estas series de tiempo (funciones que se pueden evaluar en
 # cualquier instante t, o discretizar con .set_discrete / list comprehension).
 # ---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ print(f"Ángulo de ataque en Max-Q: {flight.angle_of_attack(flight.max_dynamic_p
 print(f"Velocidad de salida del riel: {flight.out_of_rail_velocity:.1f} m/s")
 
 # Estas son las funciones (rocketpy.Function) que vamos a necesitar en el
-# módulo de cargas estructurales:
+# estudio de flutter:
 #   flight.speed(t)                  -> velocidad total [m/s]
 #   flight.dynamic_pressure(t)       -> presión dinámica q [Pa]
 #   flight.angle_of_attack(t)        -> ángulo de ataque [deg]

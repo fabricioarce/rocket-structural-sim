@@ -96,10 +96,8 @@ def plot_reports(output, data, base, thin, drag_cases, sweeps):
     _markers(pressure_axis, s)
     save(fig, output, "02-flutter-history.png")
 
-    altitude = np.linspace(0, 10000, 180)
-    p = np.interp(altitude, trace["altitude_asl_m"], trace["pressure_pa"])
-    a = np.interp(altitude, trace["altitude_asl_m"], trace["sound_speed_m_s"])
-    rho = np.interp(altitude, trace["altitude_asl_m"], trace["density_kg_m3"])
+    atmosphere = base["atmosphere"]
+    altitude, p, a, rho = (atmosphere[k] for k in ("altitude_asl_m", "pressure_pa", "sound_speed_m_s", "density_kg_m3"))
     base_alt_vf = flutter_speed(_fin(Design(**{k: s[k] for k in Design.__dataclass_fields__})), p, a)
     thin_summary = thin["summary"]
     thin_design = Design(**{**{k: thin_summary[k] for k in Design.__dataclass_fields__}})
@@ -107,13 +105,16 @@ def plot_reports(output, data, base, thin, drag_cases, sweeps):
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))
     ax[0].plot(base_alt_vf, altitude / 1000, label="Aleta base", color=COLORS[0])
     ax[0].plot(thin_alt_vf, altitude / 1000, label="Aleta delgada", color=COLORS[3])
-    ax[0].set(xlabel="Vf [m/s]", ylabel="Altitud ASL [km]", title="Vf frente a altitud")
+    flown = (atmosphere["launch_asl_m"] / 1000, s["apogee_asl_m"] / 1000)
+    for axis in ax:
+        axis.axhspan(*flown, color=COLORS[1], alpha=0.12, label="Tramo volado (base)")
+    ax[0].set(xlabel="Vf [m/s]", ylabel="Altitud ASL [km]", title="Vf frente a altitud (atmósfera del modelo)")
     ax[0].legend()
     norm = lambda values: values / values[0]
     ax[1].plot(norm(p), altitude / 1000, label="p/p₀", color=COLORS[0])
     ax[1].plot(norm(rho), altitude / 1000, label="ρ/ρ₀", color=COLORS[1])
     ax[1].plot(norm(a), altitude / 1000, label="a/a₀", color=COLORS[2])
-    ax[1].set(xlabel="Normalizado al nivel del mar", ylabel="Altitud ASL [km]", title="Atmósfera local")
+    ax[1].set(xlabel="Normalizado al nivel del mar (0 m ASL)", ylabel="Altitud ASL [km]", title="Atmósfera del modelo")
     ax[1].legend()
     save(fig, output, "03-altitude.png")
 

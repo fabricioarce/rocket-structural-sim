@@ -22,6 +22,6 @@ test_robust_selection_requires_all_scenarios (test_study.StudyTests.test_robust_
 test_thickness_sweep_monotonic (test_study.StudyTests.test_thickness_sweep_monotonic) ... ok
 
 ----------------------------------------------------------------------
-Ran 22 tests in 0.761s
+Ran 22 tests in 0.785s
 
 OK

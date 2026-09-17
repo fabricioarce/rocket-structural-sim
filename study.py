@@ -102,7 +102,15 @@ def evaluate_case(design, samples=180, max_time_step=0.12, target_ratio=1.25):
         "flutter_speed_m_s": vf,
         "flutter_ratio": ratios,
     }
-    return {"summary": summary, "trace": trace}
+    column = np.linspace(0.0, 10000.0, 201)
+    atmosphere = {
+        "altitude_asl_m": column,
+        "pressure_pa": np.asarray([flight.env.pressure(h) for h in column], float),
+        "density_kg_m3": np.asarray([flight.env.density(h) for h in column], float),
+        "sound_speed_m_s": np.asarray([flight.env.speed_of_sound(h) for h in column], float),
+        "launch_asl_m": float(flight.env.elevation),
+    }
+    return {"summary": summary, "trace": trace, "atmosphere": atmosphere}
 
 
 def _postprocess(result, fin):

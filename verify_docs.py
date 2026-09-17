@@ -4,7 +4,7 @@ from contextlib import redirect_stdout
 import hashlib
 from io import StringIO
 import json
-from math import isclose, pi
+from math import isclose
 from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
@@ -40,12 +40,6 @@ def verify():
                 continue
             path = (document.parent / unquote(parsed.path)).resolve() if parsed.path else document
             assert path.is_relative_to(ROOT), f"Enlace fuera del repositorio: {target}"
-            if not path.exists() and path.name in {
-                "structural_loads.py", "02_structural_loads.py", "04-stress-map.png",
-                "03-section-diagrams.png", "05-flutter.png", "02-load-history.png",
-                "critical-diagram.csv",
-            }:
-                continue
             assert path.exists(), f"Enlace roto en {document.name}: {target}"
             if parsed.fragment and path.suffix == ".md":
                 assert unquote(parsed.fragment) in anchors(path.read_text(encoding="utf-8")), f"Ancla inexistente: {target}"
@@ -63,9 +57,10 @@ def verify():
     assert set(images) == {p.name for p in (ROOT / "outputs").glob("*.png")}
     data = json.loads((ROOT / "outputs/results.json").read_text(encoding="utf-8"))
     assert data["config"] == json.loads((ROOT / "demo.json").read_text(encoding="utf-8"))
-    expected = {"apogee_agl_m": 3287.34, "max_q_pa": 41597.63, "critical_time_s": 1.0,
-                "stress_mpa": 3.43926857, "min_flutter_ratio": 2.03819629,
-                "max_moment_nm": 3.65647571}
+    expected = {"apogee_agl_m": 3287.34, "max_q_pa": 41597.63,
+                "min_flutter_ratio": 2.03819629,
+                "required_thickness_mm": 2.16552862,
+                "flutter_time_s": 3.34103084}
     for key, value in expected.items():
         assert isclose(data["baseline"][key], value, rel_tol=2e-6), f"Revisar cifra documentada: {key}"
     assert isclose(data["thin_fin"]["min_flutter_ratio"], 0.5103386, rel_tol=2e-6)
@@ -77,8 +72,6 @@ def verify():
     assert data["best_sampled_design"]["payload_kg"] == 0
     assert data["best_sampled_design"]["fin_scale"] == 1
     assert sum(c["admissible"] for c in data["cases"]) == 16
-    section_area = pi * (0.0635**2 - 0.062**2)
-    assert isclose(2034 / section_area / 1e6, data["baseline"]["stress_mpa"], rel_tol=1e-8)
     assert isclose(0.4**1.5, 0.2529822128134704, rel_tol=1e-12)
     for name, expected_hash in data["data_sha256"].items():
         actual = hashlib.sha256((ROOT / "data" / name).read_bytes()).hexdigest()

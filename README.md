@@ -1,111 +1,128 @@
-# Simulador de cohetes con análisis preliminar de cargas
+# Estudio de flutter de aletas para un cohete de alta potencia
 
-Proyecto educativo que usa **RocketPy para simular el vuelo** y añade una reconstrucción simplificada de cargas internas, un chequeo empírico de *fin flutter* y una comparación de diseños.
+Proyecto educativo que usa **RocketPy como caja negra de vuelo** y estudia la
+frontera empírica de flutter de sus aletas. La documentación empieza
+**desde cero**: cada capítulo introduce un concepto, una ecuación o una
+decisión del programa antes de usarlo.
 
-**La documentación empieza desde cero.** No necesitas programar para leer las gráficas ni para contribuir a la parte escrita. Sí necesitas distinguir un resultado de simulación de una medición real.
+> **Estado:** prototipo computacional verificado con pruebas numéricas, no
+> validado experimentalmente. No autoriza la fabricación ni el lanzamiento de
+> un cohete.
 
-> **Estado:** prototipo computacional verificado con pruebas numéricas, **no validado experimentalmente**. No autoriza la fabricación ni el lanzamiento de un cohete. Cubre cargas del ascenso libre, después de abandonar el riel y hasta el apogeo; no toda la misión.
+## Qué hace
+
+RocketPy proporciona trayectoria, rapidez relativa al aire, altitud, presión,
+velocidad del sonido, Mach y estabilidad. El proyecto calcula con esos datos
+la velocidad nominal de flutter \(V_f\), el cociente \(V_f/V\), el espesor
+requerido para un margen elegido y barridos de espesor y material.
+
+El caso de referencia usa Calisto, el motor Cesaroni M1670, viento constante
+de 4 m/s y el intervalo entre la salida del riel y el apogeo. Hay 18 casos
+de la malla de carga útil, escala de aleta y viento; no son ensayos.
+
+## Qué NO hace
+
+El modelo trata aletas trapezoidales homogéneas, de espesor constante y
+propiedades efectivas isótropas. No predice amplitud de vibración ni rotura
+segura. Tampoco resuelve modos, uniones, laminados, amortiguamiento o
+divergencia. Rebasar la frontera señala riesgo según el modelo, no una
+rotura segura. El resultado no sustituye ensayos, FEA ni una certificación.
+
+## Rama archivada
+
+La versión completa anterior, con cargas internas, modelo de viga y esfuerzos,
+se conserva permanentemente en
+[archive/full-structural-sim](https://github.com/fabricioarce/rocket-structural-sim/tree/archive/full-structural-sim).
+Esta rama reduce deliberadamente el alcance a flutter de aletas.
 
 ## Empieza aquí
 
-| Si quieres… | Lee… |
+| Necesitas… | Lee… |
 |---|---|
-| Entender el proyecto y cómo ayudar a redactarlo | [00 · Guía del equipo](docs/00-guia-del-equipo.md) |
-| Aprender unidades, fuerzas, vuelo y aerodinámica | [01 · Física desde cero](docs/01-fisica-desde-cero.md) |
-| Entender esfuerzo, flexión, masa distribuida y flutter | [02 · Estructuras y flutter](docs/02-estructuras-y-flutter.md) |
-| Entender qué hace un programa y leer Python básico | [03 · Programación desde cero](docs/03-programacion-desde-cero.md) |
-| Seguir cada cálculo, archivo y parámetro | [04 · Mapa del código y los datos](docs/04-codigo-y-datos.md) |
-| Interpretar todos los paneles de las siete figuras | [05 · Gráficas explicadas](docs/05-graficas-explicadas.md) |
-| Preparar justificación, objetivos, metodología y discusión | [06 · Guía de redacción y metodología](docs/06-metodologia-y-redaccion.md) |
-| Instalar, ejecutar y reproducir resultados | [07 · Reproducibilidad y uso](docs/07-reproducibilidad.md) |
-| Consultar símbolos, definiciones y fuentes | [08 · Glosario y referencias](docs/08-glosario-y-referencias.md) |
+| Entender el alcance y repartir tareas | [00 · Guía del equipo](docs/00-guia-del-equipo.md) |
+| Aprender la física del vuelo | [01 · Física desde cero](docs/01-fisica-desde-cero.md) |
+| Entender aeroelasticidad y la fórmula | [02 · Flutter desde cero](docs/02-flutter-desde-cero.md) |
+| Leer Python con ejemplos pequeños | [03 · Programación desde cero](docs/03-programacion-desde-cero.md) |
+| Seguir archivos, datos y ecuaciones | [04 · Código y datos](docs/04-codigo-y-datos.md) |
+| Interpretar las siete figuras | [05 · Gráficas explicadas](docs/05-graficas-explicadas.md) |
+| Redactar hipótesis y resultados | [06 · Metodología y redacción](docs/06-metodologia-y-redaccion.md) |
+| Reproducir la referencia | [07 · Reproducibilidad](docs/07-reproducibilidad.md) |
+| Consultar símbolos y fuentes | [08 · Glosario y referencias](docs/08-glosario-y-referencias.md) |
 
-**Ruta sugerida para el equipo de redacción:** 00 → 01 → 02 → 05 → 06. Consulta 03 y 04 cuando necesites explicar la implementación. No copies una fórmula o conclusión que no puedas explicar con tus propias palabras.
+Ruta sugerida: **00 → 01 → 02 → 05 → 06**. Consulta 03 y 04 al explicar la
+implementación, y 07 antes de publicar una cifra.
 
-### PDF para compartir con quienes ayudan con la redacción
+## Cómo ejecutar
 
-[**docs/pdf/guia-simulador-cohetes.pdf**](docs/pdf/guia-simulador-cohetes.pdf) reúne en un solo archivo, con las siete figuras incluidas, los capítulos **01 (física desde cero), 02 (estructuras y flutter), 03 (programación desde cero) y 05 (todas las gráficas explicadas)**. Pensado para enviar directamente a compañeros que solo necesitan entender el contenido, sin clonar el repositorio ni instalar nada — un lector de PDF basta.
-
-Los capítulos 00, 04, 06, 07 y 08 (guía del equipo, mapa del código, metodología, reproducibilidad y glosario) no están en ese PDF; siguen solo en `docs/` para quienes trabajen directamente con el repositorio. El PDF se genera con Typst a partir del Markdown de `docs/`; el código fuente (`docs/pdf/build_pdf.py`, `docs/pdf/preamble.typ`) queda en el repositorio para volver a generarlo si los capítulos cambian.
-
-## Ver resultados sin instalar Python
-
-Las imágenes y los datos de una ejecución de referencia están incluidos en [outputs](outputs/). Puedes leer [la guía ilustrada](docs/05-graficas-explicadas.md) directamente en GitHub.
-
-Para usar el inspector interactivo:
-
-1. Descarga o clona **el repositorio completo**; no solo el HTML.
-2. Abre `outputs/index.html` con tu navegador.
-3. Selecciona un caso y una variable, o modifica los límites de la tabla.
-
-GitHub muestra un archivo HTML como código o descarga: **este repositorio no configura GitHub Pages**. El informe funciona localmente, sin servidor ni conexión a internet. Los controles filtran simulaciones ya hechas; no ejecutan nuevas trayectorias.
-
-![Mapa de esfuerzo longitudinal durante el ascenso libre](outputs/04-stress-map.png)
-
-La imagen muestra esfuerzo modelado, no temperatura ni probabilidad de rotura. [Cómo leerla y qué significa la sección crítica](docs/05-graficas-explicadas.md#figura-04-mapa-de-esfuerzo).
-
-## Qué está implementado
-
-- Ejemplo de las cuatro clases principales de RocketPy: ambiente, motor, cohete y vuelo.
-- Caso basado en Calisto y motor Cesaroni M1670, con datos locales.
-- Fuerzas por superficie con orientación y velocidad local del aire.
-- Viga libre equivalente con alivio inercial traslacional y angular, cargas axiales, cortantes y momentos en dos planos.
-- Máximo esfuerzo longitudinal combinado por **sección e instante**.
-- Frontera empírica de flutter según la revisión de Bennett de 2023.
-- Malla de 9 diseños y 2 vientos: **18 casos**, no 18 ensayos experimentales.
-- Selección del mayor apogeo mínimo entre los escenarios de viento que cumplen los criterios definidos.
-- Caso adicional de aletas delgadas, sensibilidad a Cd ±15% y refinamiento numérico del caso base.
-- Siete figuras PNG, informe HTML, series CSV y metadatos JSON.
-
-## Resultados de referencia, no mediciones
-
-Configuración: [demo.json](demo.json). Datos de respaldo: [results.json](outputs/results.json) y [cases.csv](outputs/cases.csv).
-
-| Magnitud del caso base | Resultado aproximado |
-|---|---:|
-| Carga útil **añadida** | 0 kg |
-| Viento transversal constante | 4 m/s |
-| Apogeo sobre el lanzamiento, AGL | 3287 m |
-| Máxima velocidad relativa al aire muestreada | 286.1 m/s |
-| Máxima presión dinámica | 41.60 kPa, en 3.341 s |
-| Máximo esfuerzo longitudinal modelado | 3.439 MPa, en 1.000 s |
-| Mínimo cociente de flutter Vf/V | 2.038 |
-| Mínimo Vf/V con aletas de 1.2 mm | 0.510 |
-
-**No basta con estos números para decir que el cohete es seguro.** En esta malla el máximo esfuerzo es casi idéntico entre diseños, dominado por el empuje aplicado en la cola y la sección uniforme. La selección no demuestra una optimización estructural validada. Además, al cambiar aletas se conserva el Cd total original: el ranking geométrico es demostrativo.
-
-## Ejecutar en el entorno ya preparado
-
-Desde la raíz del proyecto, en Linux:
+Desde la raíz, con el entorno preparado:
 
 ```bash
-.venv/bin/python run_demo.py --output outputs-local --open
-```
-
-Para una instalación nueva, Windows o una ejecución rápida, sigue [la guía de reproducibilidad](docs/07-reproducibilidad.md). La versión comprobada es Python 3.14.7 con las dependencias fijadas en [requirements.txt](requirements.txt).
-
-### Verificación
-
-```bash
+uv venv --python 3.14 .venv
+uv pip install --python .venv/bin/python -r requirements.txt
 .venv/bin/python -m unittest discover -v
+.venv/bin/python run_demo.py
 .venv/bin/python verify_outputs.py
-.venv/bin/python verify_docs.py
 node verify_report.cjs
 ```
 
-Node.js se usa únicamente en el último chequeo de la lógica de la interfaz; no es necesario para las simulaciones ni para abrir el HTML. Estas comprobaciones no sustituyen la validación física independiente.
+También se pueden usar `python run_demo.py --quick`, `--open`, `--config
+ruta.json` y `--output carpeta`. El informe es local y no necesita servicios
+externos.
 
-## Límites principales
+## Qué produce
 
-- La distribución interna de masas es **equivalente**, no medida.
-- La estructura se trata como una sección tubular uniforme con propiedades supuestas.
-- No incluye pandeo, uniones, torsión, recuperación, reacciones del riel ni un análisis modal.
-- El modelo estructural cuasiestático no reproduce todos los términos de la dinámica de masa variable de RocketPy.
-- El criterio de esfuerzo es un límite de estudio configurable, no un admisible certificado del material.
-- La velocidad de flutter es una frontera empírica, no una simulación de vibraciones o una predicción del instante de rotura.
+La ejecución genera `results.json`, `effective-config.json`, `cases.csv`,
+`case-001.csv` a `case-018.csv`, `baseline.csv`, `thin-fin.csv`,
+`thickness-sweep.csv`, `material-sweep.csv`, `tests.txt` e `index.html`.
+Las siete figuras son:
 
-## Créditos y procedencia
+1. `01-flight.png`, resumen de vuelo.
+2. `02-flutter-history.png`, historia de \(V_f\), velocidad y ratio.
+3. `03-altitude.png`, atmósfera y \(V_f\) frente a altitud.
+4. `04-thickness-sweep.png`, espesores y materiales.
+5. `05-geometry-map.png`, escala de planta y espesor.
+6. `06-design-space.png`, espacio discreto de diseños.
+7. `07-drag-sensitivity.png`, sensibilidad al factor de arrastre.
 
-El ejemplo Calisto, los archivos de `data/` y partes de la configuración/adaptación se basan en [RocketPy](https://github.com/RocketPy-Team/RocketPy). Se conserva su [aviso de licencia MIT](LICENSES/RocketPy-MIT.txt). Las fórmulas físicas y sus fuentes están identificadas en [las referencias](docs/08-glosario-y-referencias.md).
+## Resultados de referencia
 
-Esta publicación no asigna por sí sola una licencia general a las aportaciones nuevas; esa elección corresponde al titular del proyecto. Tampoco atribuye a RocketPy la validación del módulo estructural desarrollado aquí.
+Son datos congelados de `outputs/results.json`, no mediciones. El objetivo de
+selección es un ratio mínimo de **1.25**.
+
+| Caso o material | Resultado |
+|---|---:|
+| Base: ratio mínimo \(V_f/V\) | **2.038** |
+| Aleta delgada, 1.2 mm: ratio mínimo | **0.510** |
+| Espesor requerido, aluminio 6061 | **2.17 mm** |
+| Espesor requerido, G10 | **4.00 mm** |
+| Espesor requerido, carbono tejido | **3.89 mm** |
+| Espesor requerido, contrachapado de abedul | **7.23 mm** |
+| Espesor requerido, acrílico/policarbonato | **6.42 mm** |
+
+Los cinco espesores son para la trayectoria base y el objetivo 1.25. El
+apogeo base es 3287.34 m AGL, la máxima rapidez relativa es 286.12 m/s y
+Max-Q es 41.60 kPa.
+
+## Límites del modelo
+
+RocketPy conserva la responsabilidad de simular el vuelo. El módulo de
+flutter es una aproximación empírica: usa \(G\), geometría, presión y
+velocidad del sonido, pero no conoce la construcción real de las aletas.
+Los barridos algebraicos no cambian la masa de la aleta; el caso delgado sí
+se vuelve a simular. El ratio no es una probabilidad de fallo.
+
+## Estructura del repositorio
+
+`simulation.py` construye el vuelo, `flutter.py` calcula \(V_f\),
+`materials.py` contiene datos de referencia, `study.py` evalúa casos,
+`report.py` dibuja, y `run_demo.py` coordina la referencia. Los archivos
+`verify_*.py` comprueban resultados y documentación. `data/` contiene datos
+locales y `LICENSES/` conserva atribuciones.
+
+## Licencias y fuentes
+
+El proyecto conserva las atribuciones existentes. Las fuentes principales son
+John K. Bennett (2023), la documentación de RocketPy, MatWeb y *Wood
+Handbook FPL-GTR-190*. Las propiedades de materiales son valores típicos de
+referencia, no propiedades certificadas. La fórmula y el ejemplo publicado
+de 1425 ft/s se contrastan en [test_flutter.py](test_flutter.py).

@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+outputs/*
+!outputs/*.png
+!outputs/index.html
+!outputs/results.json
+!outputs/effective-config.json
+!outputs/cases.csv
+!outputs/case-*.csv
+!outputs/baseline.csv
+!outputs/critical-diagram.csv
+!outputs/thin-fin.csv
+!outputs/tests.txt
+outputs-*/
+structural_loads_calisto.png

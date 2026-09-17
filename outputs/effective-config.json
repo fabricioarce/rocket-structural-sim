@@ -1,0 +1,44 @@
+{
+  "base": {
+    "payload_kg": 0.0,
+    "fin_scale": 1.0,
+    "fin_thickness_m": 0.003,
+    "fin_density_kg_m3": 2700.0,
+    "fin_shear_pa": 26000000000.0,
+    "wind_m_s": 4.0,
+    "drag_factor": 1.0,
+    "payload_station_m": 0.45,
+    "drag_station_m": 0.8
+  },
+  "section": {
+    "outer_radius": 0.0635,
+    "thickness": 0.0015,
+    "youngs_modulus": 68900000000.0,
+    "shear_modulus": 26000000000.0,
+    "yield_strength": 276000000.0
+  },
+  "limits": {
+    "stress_mpa": 4.0,
+    "flutter_ratio": 1.25,
+    "stability_cal": 1.0,
+    "rail_speed_m_s": 20.0,
+    "loaded_aoa_deg": 10.0,
+    "mach": 1.5
+  },
+  "payloads_kg": [
+    0.0,
+    3.0,
+    6.0
+  ],
+  "fin_scales": [
+    0.85,
+    1.0,
+    1.15
+  ],
+  "winds_m_s": [
+    0.0,
+    4.0
+  ],
+  "samples": 180,
+  "mass_nodes": 32
+}
